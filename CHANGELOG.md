@@ -1,6 +1,12 @@
 # PyNWB Changelog
 
-## PyNWB 3.1.3 (Unreleased)
+## PyNWB 3.2.0 (Upcoming)
+
+### Fixed
+- Fixed invalid CSS properties in documentation assistant toggle that prevented proper positioning on displays ≥1400px wide. @rly [#2151](https://github.com/NeurodataWithoutBorders/pynwb/pull/2151)
+- 
+
+## PyNWB 3.1.3 (December 9, 2025)
 
 ### Added
 - Added 'target_tables' kwarg to DynamicTable subclasses to allow classes that extend DynamicTable subclasses to specify the mapping of DynamicTableRegion columns to the target tables. @rly, @stephprince [#2096](https://github.com/NeurodataWithoutBorders/pynwb/issues/2096)
@@ -13,6 +19,7 @@
 
 ### Changed
 - Change UI of documentation assistant to be an accordion that is always visible. @bendichter [#2124](https://github.com/NeurodataWithoutBorders/pynwb/pull/2124)
+- Updated minimum HDMF version to 4.1.2 and updated tests accordingly. @rly [#2144](https://github.com/NeurodataWithoutBorders/pynwb/pull/2144)
 
 
 ## PyNWB 3.1.2 (August 13, 2025)
