@@ -1,7 +1,7 @@
 """Module to validate an NWB file against a namespace."""
 from typing import Tuple, List, Dict, Optional
-from pathlib import Path
 from warnings import warn
+from pathlib import Path
 
 from hdmf.spec import NamespaceCatalog
 from hdmf.build import BuildManager, TypeMap
@@ -25,13 +25,13 @@ __all__ = [
 class ValidationReport:
     path: Optional[str]
     namespace: str
-    errors: list
+    errors: list[str]
     created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
     def is_valid(self) -> bool:
         return len(self.errors) == 0
 
-def _validate_helper(io: HDMFIO, namespace: str = CORE_NAMESPACE) -> list:
+def _validate_helper(io: HDMFIO, namespace: str = CORE_NAMESPACE) -> list[str]:
     builder = io.read_builder()
     validator = ValidatorMap(io.manager.namespace_catalog.get_namespace(name=namespace))
     return validator.validate(builder)
@@ -146,7 +146,14 @@ def get_cached_namespaces_to_validate(path: Optional[str] = None,
         "doc": "Driver for h5py to use when opening the HDF5 file.",
         "default": None,
     }, 
-    returns="Validation reports in the file.",
+      {
+        "name": "return_report",
+        "type": bool,
+        "doc": "Return ValidationReport objects instead of raw validation errors.",
+        "default": False,
+    },
+    
+    returns="Validation errors or validation reports in the file.",
     rtype=list,
     is_method=False,
     allow_positional=AllowPositional.WARNING,
@@ -158,6 +165,7 @@ def validate(**kwargs):
     It is recommended to use the NWBInspector for more comprehensive validation of both
     compliance with the schema and compliance of data with NWB best practices.
     """
+    return_report = getargs("return_report", kwargs)
 
     paths, path = popargs("paths", "path", kwargs)
 
@@ -177,7 +185,13 @@ def validate(**kwargs):
     else:
         validation_errors = _validate_single_file(path=path, **kwargs)
 
-    return validation_errors
+    if return_report:
+        return validation_errors
+    else:
+        errors = []
+        for report in validation_errors:
+            errors.extend(report.errors)
+        return errors
 
 
 def _validate_single_file(**kwargs):
