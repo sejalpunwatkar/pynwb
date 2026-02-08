@@ -23,6 +23,19 @@ __all__ = [
 
 @dataclass
 class ValidationReport:
+    """
+    A structured representation of NWB validation results.
+
+    This class stores the results of validating NWB files, including any errors
+    and contextual metadata. It provides a clear, structured way to access
+    validation outcomes instead of only raw error messages.
+
+    Attributes:
+        path (Optional[str]): The file path of the NWB file that was validated.
+        namespace (str): The NWB namespace used during validation.
+        errors (list): A list of validation errors found in the NWB file.
+        created_at (str): The timestamp (in UTC ISO format) when this report was created.
+    """
     path: Optional[str]
     namespace: str
     errors: list
